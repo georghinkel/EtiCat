@@ -15,14 +15,8 @@ namespace EtiCat.Model
 
         public string Target { get; }
 
-        public Component? TargetComponent { get; }
+        public Component? TargetComponent { get; set; }
 
-        public bool IsLowerBound { get; set; }
-
-        public bool IsUpperBound { get; set; }
-
-        public Version? MinVersion { get; set; }
-
-        public Version? MaxVersion { get; set; }
+        public DependencyBehavior Behavior { get; set; }
     }
 }

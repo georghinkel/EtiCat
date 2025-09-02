@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-label="Briefmarke mit Katzenkopf-Umriss">
+  <!-- Briefmarken-Rand -->
+  <rect x="20" y="20" width="200" height="200" fill="#ffffff" stroke="#2d2d2d" stroke-width="3" rx="4" ry="4"/>
+  <!-- Zickzack-Perforation (vereinfachte Briefmarken-Umrandung) -->
+  <g fill="#ffffff" stroke="#2d2d2d" stroke-width="3">
+    <!-- obere Perforation -->
+    <path d="M20 20 H220" stroke-linecap="butt" />
+    <!-- rechte Perforation (zickzack durch kleine Dreiecke) -->
+  </g>
+  <g fill="#2d2d2d">
+    <!-- Perforations oben -->
+    <g transform="translate(20,20)">
+      <!-- erstelle kleine halbkreisförmige Einschnitte entlang jeder Seite -->
+      <!-- oben -->
+      <g stroke="#ffffff" stroke-width="3">
+        <!-- Reihe von Halbkreisen oben -->
+        <path d="M0 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0" fill="none"/>
+      </g>
+    </g>
+    <!-- rechts -->
+    <g transform="translate(220,20) rotate(90)">
+      <g stroke="#ffffff" stroke-width="3">
+        <path d="M0 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0" fill="none"/>
+      </g>
+    </g>
+    <!-- unten -->
+    <g transform="translate(220,220) rotate(180)">
+      <g stroke="#ffffff" stroke-width="3">
+        <path d="M0 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0" fill="none"/>
+      </g>
+    </g>
+    <!-- links -->
+    <g transform="translate(20,220) rotate(270)">
+      <g stroke="#ffffff" stroke-width="3">
+        <path d="M0 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0
+                 a10 10 0 0 1 20 0" fill="none"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Rahmen-Innenfläche für Icon -->
+  <rect x="40" y="40" width="160" height="160" rx="4" ry="4" fill="#f7f7f7" stroke="none"/>
+
+  <!-- Schematischer Katzenkopf-Umriss (zentriert) -->
+  <g transform="translate(120,120)" fill="none" stroke="#2d2d2d" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Kopf-Kontur (vereinfachte runde Form mit Kinn) -->
+    <path d="M -48 -6
+             C -48 -42, -20 -70, 0 -70
+             C 20 -70, 48 -42, 48 -6
+             C 48 20, 36 36, 12 46
+             C 6 50, -6 54, -12 46
+             C -36 36, -48 20, -48 -6 Z"/>
+    <!-- Ohren (schematisch, als spitze Dreiecke) -->
+    <path d="M -34 -40 L -58 -76 L -20 -58 Z" />
+    <path d="M 34 -40 L 58 -76 L 20 -58 Z" />
+    <!-- Gesichtsachse (nur optional, dezent) -->
+    <!-- Augen als kleine angedeutete Linien -->
+    <g stroke="#2d2d2d" stroke-width="5">
+      <line x1="-22" y1="-2" x2="-10" y2="-2" stroke-linecap="round"/>
+      <line x1="10" y1="-2" x2="22" y2="-2" stroke-linecap="round"/>
+    </g>
+    <!-- Nasenstich / kleines Dreieck -->
+    <path d="M0 6 L -6 0 L 6 0 Z" fill="#2d2d2d" stroke="none"/>
+  </g>
+</svg>

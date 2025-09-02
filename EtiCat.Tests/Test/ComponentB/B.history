@@ -1,0 +1,10 @@
+module B
+folder build
+
+component B.test
+
+major (0.1.0): A test
+
+patch: A patch
+minor: Feature 3
+major: Major feature

@@ -6,18 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EtiCat.Components.NuGet
+namespace EtiCat.Components.PackageJson
 {
-    internal class NuGetComponentProvider : IComponentProvider
+    internal class PackageJsonProvider : IComponentProvider
     {
         public bool CanProvideComponent(string path, string extension)
         {
-            return extension == ".nuspec";
+            return path.EndsWith("package.json");
         }
 
         public Component ProvideComponent(string path)
         {
-            return new NuspecComponent(path);
+            return new PackageJsonComponent(path);
         }
     }
 }

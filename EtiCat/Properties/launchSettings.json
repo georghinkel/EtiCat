@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EtiCat": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Repos\\NMF"
+    }
+  }
+}

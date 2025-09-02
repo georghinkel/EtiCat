@@ -5,10 +5,31 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RollForward>LatestMajor</RollForward>
+    	<Description>A tool to automate versioning and tagging for .NET-based monorepositories</Description>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<Copyright>Georg Hinkel</Copyright>
+	<PackageProjectUrl>https://github.com/georghinkel/EtiCat</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/georghinkel/EtiCat.git</RepositoryUrl>
+	<PackAsTool>true</PackAsTool>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<Version>0.1.0</Version>
+    <PackageTags>versioning;monorepo;ci</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NMF-Layering" Version="2.0.457" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+    <InternalsVisibleTo Include="EtiCat.Tests" />
+	<None Include="..\icon.png" Pack="true" PackagePath="" />
+	<None Include="..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

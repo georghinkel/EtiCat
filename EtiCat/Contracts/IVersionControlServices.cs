@@ -8,6 +8,10 @@ namespace EtiCat.Contracts
 {
     public interface IVersionControlServices
     {
+        string LastCommitIdentifier();
+
+        string SecondLastCommitReference();
+
         int CommitsSince(string baseVersion);
 
         IEnumerable<string> FilesChangedSince(string baseVersion);

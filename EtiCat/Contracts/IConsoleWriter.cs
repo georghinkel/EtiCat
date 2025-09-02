@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EtiCat.Verbs
+namespace EtiCat.Contracts
 {
-    internal class ExplainVerb
+    public interface IConsoleWriter
     {
+        void WriteLine(string message);
     }
 }

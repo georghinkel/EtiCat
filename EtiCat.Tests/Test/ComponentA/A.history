@@ -1,0 +1,11 @@
+module A
+folder src
+
+component A.test
+
+major (0.1.0): A test
+minor: A feature
+minor: Feature 2
+major: Major feature
+
+patch: A patch

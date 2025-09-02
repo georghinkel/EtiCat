@@ -6,12 +6,39 @@ using System.Threading.Tasks;
 
 namespace EtiCat.Model
 {
-    public record Version(int Major, int Minor, int Patch, int Build)
+    public record struct Version(short Major, short Minor, short Patch) : IComparable<Version>
     {
-        public Version MajorChange() => new Version(Major + 1, 0, 0, Build);
+        public int CompareTo(Version other)
+        {
+            if (Major > other.Major) return -1;
+            if (Major < other.Major) return 1;
+            if (Minor > other.Minor) return -1;
+            if (Minor < other.Minor) return 1;
+            return other.Patch - Patch;
+        }
 
-        public Version MinorChange() => new Version(Major, Minor + 1, 0, Build);
+        public Version MajorChange() => new Version((short)(Major + 1), 0, 0);
 
-        public Version PatchChange() => new Version(Major, Minor, Patch + 1, Build);
+        public Version MinorChange() => new Version(Major, (short)(Minor + 1), 0);
+
+        public Version PatchChange() => new Version(Major, Minor, (short)(Patch + 1));
+
+        public string Semver(string? prerelease, string? buildInfo)
+        {
+            var version = $"{Major}.{Minor}.{Patch}";
+            if (!string.IsNullOrEmpty(prerelease))
+            {
+                version += "-" + prerelease.Trim();
+            }
+            if (!string.IsNullOrEmpty(buildInfo))
+            {
+                version += "+" + buildInfo.Trim();
+            }
+            return version;
+        }
+
+        public string NextMajor() => $"{Major + 1}.0";
+
+        public string NextMinor() => $"{Major}.{Minor + 1}";
     }
 }

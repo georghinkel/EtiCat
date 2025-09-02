@@ -3,5 +3,9 @@ using EtiCat.Verbs;
 
 Environment.ExitCode = Parser.Default.ParseArguments(args,
     typeof(ApplyVerb),
+    typeof(ChangeLogVerb),
     typeof(CheckVerb),
-    typeof(ExplainVerb)).MapResult((VerbBase v) => v.Execute(), _ => 2);
+    typeof(CiVerb),
+    typeof(PackVerb),
+    typeof(PublishVerb),
+    typeof(TagVerb)).MapResult((VerbBase v) => v.Execute(), _ => 2);

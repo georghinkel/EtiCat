@@ -1,0 +1,9 @@
+module EtiCat
+folder EtiCat
+testFolder EtiCat.Tests
+
+compile EtiCat/EtiCat.csproj
+test EtiCat.Tests/EtiCat.Tests.csproj
+component EtiCat/EtiCat.csproj
+
+patch (0.1.0): Initial version
