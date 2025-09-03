@@ -7,3 +7,4 @@ test EtiCat.Tests/EtiCat.Tests.csproj
 component EtiCat/EtiCat.csproj
 
 patch (0.1.0): Initial version
+patch: fix that folders were ignored for check

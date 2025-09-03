@@ -49,18 +49,23 @@ namespace EtiCat.Services
                 var process = new Process();
                 process.StartInfo = processStartInfo;
                 var sb = new StringBuilder();
+                var err = new StringBuilder();
                 process!.OutputDataReceived += (_, e) =>
                 {
                     sb.AppendLine(e.Data);
                 };
                 process.ErrorDataReceived += (_, e) =>
                 {
-                    Console.Error.WriteLine(e.Data);
+                    err.AppendLine(e.Data);
                 };
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
                 process.WaitForExit();
+                if (process.ExitCode != 0)
+                {
+                    throw new InvalidOperationException($"Error {explanation} (executing 'git {command}'): " + err.ToString());
+                }
                 return sb.ToString();
             }
             catch (Exception ex)

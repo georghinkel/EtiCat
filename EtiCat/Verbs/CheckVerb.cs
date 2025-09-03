@@ -34,9 +34,7 @@ namespace EtiCat.Verbs
                     continue;
                 }
 
-                var directory = Path.GetDirectoryName(module.Path);
-
-                if (directory != null && filesAffected.Any(path => path.StartsWith(directory)))
+                if (filesAffected.Any(path => module.Folders.Any(f => path.StartsWith(f))))
                 {
                     missingModuleChanges.Add(module.Name);
                 }
