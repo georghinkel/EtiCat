@@ -28,5 +28,5 @@ jobs:
     - name: CI
       run: dotnet run --project EtiCat/EtiCat.csproj -- ci
     - name: Publish the package
-      run: if (Test-path EtiCat/bin/Release/*.nupkg) { dotnet nuget push EtiCat/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} }
+      run: if (Test-path EtiCat/bin/Release/*.nupkg) { dotnet nuget push EtiCat/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} }
       shell: pwsh
