@@ -24,7 +24,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Install EtiCat
-      run: dotnet tool install EtiCat
+      run: dotnet tool install EtiCat -g
     - name: CI
       run: EtiCat ci
     - name: Publish the package

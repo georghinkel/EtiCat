@@ -26,7 +26,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Install EtiCat
-      run: dotnet tool install EtiCat
+      run: dotnet tool install EtiCat -g
     - name: CI
       run: EtiCat ci --prerelease ${{ steps.extract_branch.outputs.branch }}
     - name: Upload Packages
