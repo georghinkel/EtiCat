@@ -28,6 +28,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: CI
-      run: dotnet test && dotnet pack EtiCat --configuration Release
+      run: dotnet test && dotnet build EtiCat --configuration Release
     - name: Publish the package
       run: dotnet nuget push EtiCat/bin/Release/*.nupkg
