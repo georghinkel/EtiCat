@@ -28,7 +28,7 @@ jobs:
     - name: Build Eticat
       run: dotnet build --no-restore EtiCat
     - name: CI
-      run: dotnet run --no-build EtiCat -- ci --prerelease ${{ steps.extract_branch.outputs.branch }}
+      run: dotnet run --no-build --project EtiCat/EtiCat.csproj -- ci --prerelease ${{ steps.extract_branch.outputs.branch }}
     - name: Upload Packages
       uses: actions/upload-artifact@v4
       with:

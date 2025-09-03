@@ -33,7 +33,7 @@ namespace EtiCat.Verbs
 
             foreach (var module in modules)
             {
-                ConsoleWriter.WriteLine($"Applying versions for {module.Name}");
+                ConsoleWriter.WriteLine($"Applying version {module.Latest.Semver(Prerelease, CommitId)} to {module.Name}");
 
                 var version = new ExtendedVersionInfo(module.Latest, Prerelease, BuildNumber, CommitId, VersionControlServices!.CommitsSince(Baseline));
 

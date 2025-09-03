@@ -20,6 +20,8 @@ namespace EtiCat.Model
 
         public bool IsChangedSinceBaseline { get; set; }
 
+        public bool IsTestOnlyChanges { get; set; }
+
         public List<string> Folders { get; } = new List<string>();
 
         public List<string> TestFolders { get; } = new List<string>();

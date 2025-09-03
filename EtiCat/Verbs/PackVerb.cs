@@ -20,7 +20,7 @@ namespace EtiCat.Verbs
 
         public override void ExecuteCore(IReadOnlyCollection<Module> modules)
         {
-            var layers = Layering<Module>.CreateLayers(modules.Where(m => !OnlyAffected || m.IsChangedSinceBaseline),
+            var layers = Layering<Module>.CreateLayers(modules.Where(m => !OnlyAffected || m.IsChangedSinceBaseline || m.IsTestOnlyChanges),
                 m => m.CompileComponents.SelectMany(c => c.Dependencies.Select(d => d.TargetComponent?.Module!).Where(it => it != null)));
 
             for (int i = 0; i < layers.Count; i++)
@@ -31,6 +31,7 @@ namespace EtiCat.Verbs
                 }
                 foreach (var component in layers[i].First().CompileComponents)
                 {
+                    ConsoleWriter.WriteLine($"Compiling {component.Name}");
                     component.Compile();
                 }
             }
@@ -38,6 +39,7 @@ namespace EtiCat.Verbs
             {
                 foreach (var component in layers[i].First().TestComponents)
                 {
+                    ConsoleWriter.WriteLine($"Testing {component.Name}");
                     component.Test();
                 }
             }
@@ -45,7 +47,11 @@ namespace EtiCat.Verbs
             {
                 foreach (var component in layers[i].First().PublishComponents)
                 {
-                    component.Pack();
+                    if (!OnlyAffected || component.Module.IsChangedSinceBaseline)
+                    {
+                        ConsoleWriter.WriteLine($"Packing {component.Name}");
+                        component.Pack();
+                    }
                 }
             }
         }

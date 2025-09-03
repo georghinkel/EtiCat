@@ -40,6 +40,12 @@ namespace EtiCat.Verbs
                 }
                 else
                 {
+                    if (filesAffected.Any(path => module.TestFolders.Any(f => path.StartsWith(f))))
+                    {
+                        Console.Error.WriteLine($"Module {module.Name} has test-only changes.");
+                        module.IsTestOnlyChanges = true;
+                    }
+
                     var majorChangeUpdates = (from comp in module.Components
                                               from dep in comp.Dependencies
                                               where dep.TargetComponent != null
@@ -64,6 +70,8 @@ namespace EtiCat.Verbs
             {
                 throw new InvalidOperationException($"The following modules have changes that are not reflected by changes to the module history: {string.Join(", ", missingModuleChanges)}");
             }
+
+            ConsoleWriter.WriteLine("All relevant changes are reflected in module histories.");
         }
 
         private bool IsIncompatibleChange(DependencyBehavior behavior, Version version)
