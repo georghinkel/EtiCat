@@ -30,4 +30,4 @@ jobs:
     - name: CI
       run: dotnet test && dotnet build EtiCat --configuration Release
     - name: Publish the package
-      run: dotnet nuget push EtiCat/bin/Release/*.nupkg
+      run: dotnet nuget push EtiCat/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
