@@ -11,7 +11,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
     permissions:
       packages: write
       contents: read
@@ -22,12 +21,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        source-url: https://api.nuget.org/v3/index.json
-      env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }}
     - name: Restore dependencies
       run: dotnet restore
+    - name: Install EtiCat
+      run: dotnet tool install EtiCat
     - name: CI
-      run: dotnet test && dotnet build EtiCat --configuration Release
+      run: EtiCat ci
     - name: Publish the package
-      run: dotnet nuget push EtiCat/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+      run: if (Test-path EtiCat/bin/Release/*.nupkg) { dotnet nuget push EtiCat/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} }
+      shell: pwsh

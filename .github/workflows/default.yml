@@ -14,16 +14,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Install EtiCat
+      run: dotnet tool install EtiCat
+    - name: CI
+      run: EtiCat ci --prerelease ${{ steps.extract_branch.outputs.branch }}
     - name: Upload Packages
       uses: actions/upload-artifact@v4
       with:
