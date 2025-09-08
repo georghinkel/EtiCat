@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EtiCat.Components.NuGet
+namespace EtiCat.Components.Shell
 {
-    internal class NuspecComponentProvider : IComponentProvider
+    internal class ShellComponentProvider : IComponentProvider
     {
         public bool CanProvideComponent(string path, string extension)
         {
-            return extension == ".nuspec";
+            return extension == ".sh";
         }
 
         public void Flush(IProcessExecutor processExecutor)
@@ -21,7 +21,7 @@ namespace EtiCat.Components.NuGet
 
         public Component ProvideComponent(string path)
         {
-            return new NuspecComponent(this, path);
+            return new ShellComponent(path, this);
         }
     }
 }

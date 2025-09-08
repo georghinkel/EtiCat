@@ -1,4 +1,5 @@
-﻿using EtiCat.Model;
+﻿using EtiCat.Contracts;
+using EtiCat.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,16 @@ namespace EtiCat.Components.AssemblyInfo
     {
         public override string Type => "assembly-info";
 
-        public AssemblyInfoComponent(string path, string? name) : base(path, name)
+        public override IComponentProvider Provider => _provider;
+
+        private readonly AssemblyInfoProvider _provider;
+
+        public AssemblyInfoComponent(string path, string? name, AssemblyInfoProvider provider) : base(path, name)
         {
+            _provider = provider;
         }
 
-        public override void Apply(ExtendedVersionInfo versionInfo)
+        public override void Apply(ExtendedVersionInfo versionInfo, bool dryRun)
         {
             var lines = File.ReadAllText(Path);
 
@@ -26,7 +32,16 @@ namespace EtiCat.Components.AssemblyInfo
             ReplaceOrInsert(ref lines, "AssemblyFileVersion", fullVersion);
             ReplaceOrInsert(ref lines, "AssemblyInformationalVersion", versionInfo.Commit != null ? fullVersion + "+" + versionInfo.Commit : fullVersion);
 
-            File.WriteAllText(Path, lines);
+            if (dryRun)
+            {
+                Console.WriteLine($"Would write to {Path}:");
+                Console.WriteLine(lines);
+                Console.WriteLine();
+            }
+            else
+            {
+                File.WriteAllText(Path, lines);
+            }
         }
 
         private void ReplaceOrInsert(ref string contents, string attributeName, string value)

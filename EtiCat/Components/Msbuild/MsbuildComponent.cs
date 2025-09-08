@@ -1,10 +1,12 @@
-﻿using EtiCat.Model;
+﻿using EtiCat.Contracts;
+using EtiCat.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -12,13 +14,15 @@ using IOPath = System.IO.Path;
 
 namespace EtiCat.Components.Csproj
 {
-    internal class CsprojComponent : Component
+    internal class MsbuildComponent : Component
     {
-        private XElement _tree;
+        private readonly XElement _tree;
+        private readonly MsbuildComponentProvider _provider;
 
-        public CsprojComponent(string path) : base(path)
+        public MsbuildComponent(MsbuildComponentProvider provider, string path) : base(path)
         {
             _tree = XElement.Load(path);
+            _provider = provider;
 
             var directory = IOPath.GetDirectoryName(path);
 
@@ -35,7 +39,9 @@ namespace EtiCat.Components.Csproj
 
         public override string Type => "csproj";
 
-        public override void Apply(ExtendedVersionInfo versionInfo)
+        public override IComponentProvider Provider => _provider;
+
+        public override void Apply(ExtendedVersionInfo versionInfo, bool dry)
         {
             ReplaceOrInsert("AssemblyVersion", $"{versionInfo.Version.Major}.0.0.0");
 
@@ -44,7 +50,19 @@ namespace EtiCat.Components.Csproj
             ReplaceOrInsert("InformationalVersion", versionInfo.Commit != null ? fullVersion + "+" + versionInfo.Commit : fullVersion);
             ReplaceOrInsert("PackageVersion", versionInfo.Version.Semver(versionInfo.Prerelease, versionInfo.Commit));
 
-            _tree.Save(Path);
+            if (dry)
+            {
+                var writer = new StringWriter();
+                _tree.WriteTo(XmlWriter.Create(writer));
+
+                Console.WriteLine($"Write to {Path}:");
+                Console.WriteLine(writer.ToString());
+                Console.WriteLine();
+            }
+            else
+            {
+                _tree.Save(Path);
+            }
         }
 
         private void ReplaceOrInsert(string name, string value)
@@ -64,19 +82,19 @@ namespace EtiCat.Components.Csproj
             exactElement.Value = value;
         }
 
-        public override void Compile()
+        public override void Compile(IProcessExecutor processExecutor)
         {
-            ExecuteAndCheck("dotnet", $"build --no-dependencies {Path} --configuration Release");
+            _provider.Schedule(Path, "build --configuration Release", processExecutor);
         }
 
-        public override void Test()
+        public override void Test(IProcessExecutor processExecutor)
         {
-            ExecuteAndCheck("dotnet", $"test {Path} --configuration Release");
+            _provider.Schedule(Path, "test --configuration Release", processExecutor);
         }
 
-        public override void Pack()
+        public override void Pack(IProcessExecutor processExecutor)
         {
-            ExecuteAndCheck("dotnet", $"pack {Path} --no-build --include-symbols");
+            _provider.Schedule(Path, "pack --no-build --include-symbols", processExecutor);
         }
     }
 }

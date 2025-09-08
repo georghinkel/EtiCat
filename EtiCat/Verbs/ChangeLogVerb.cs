@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EtiCat.Verbs
 {
     [Verb("changelog", HelpText = "Creates changelogs for all modules")]
-    internal class ChangeLogVerb : VerbBase
+    internal class ChangeLogVerb : DryRunVerbBase
     {
         [Option('o', "output-directory", HelpText = "Output directory for changelogs. If no output directory is set, changelogs are generated next to the module files.")]
         public string? OutputPath { get; set; }
@@ -28,9 +28,17 @@ namespace EtiCat.Verbs
                 var fileName = FileNamePattern.Replace("%module%", module.Name);
                 if (!Directory.Exists(directory))
                 {
-                    Directory.CreateDirectory(directory);
+                    if (DryRun)
+                    {
+                        Console.WriteLine("Would create directory " + directory);
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
                 }
-                using (var writer = File.CreateText(Path.Combine(directory, fileName)))
+                var fullPath = Path.Combine(directory, fileName);
+                using (var writer = DryRun ? (TextWriter)(new StringWriter()) : File.CreateText(fullPath))
                 {
                     writer.WriteLine($"# {module.Name} Changelog");
                     writer.WriteLine();
@@ -40,6 +48,13 @@ namespace EtiCat.Verbs
                         writer.WriteLine();
                         writer.WriteLine(version.Value.Content);
                         writer.WriteLine();
+                    }
+
+                    if (DryRun)
+                    {
+                        Console.WriteLine($"Would write to {fullPath}:");
+                        Console.WriteLine(writer.ToString());
+                        Console.WriteLine();
                     }
                 }
             }

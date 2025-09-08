@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EtiCat.Verbs
 {
     [Verb("apply", true, HelpText = "Applies the version histories")]
-    internal class ApplyVerb : VerbBase
+    internal class ApplyVerb : DryRunVerbBase
     {
         public ApplyVerb() : base() { }
 
@@ -39,7 +39,7 @@ namespace EtiCat.Verbs
 
                 foreach (var component in module.Components)
                 {
-                    component.Apply(version);
+                    component.Apply(version, DryRun);
                 }
             }
         }

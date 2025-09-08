@@ -33,5 +33,9 @@ namespace EtiCat.Tests.Stubs
         {
             Applied?.Invoke(testComponent, versionInfo);
         }
+
+        public void Flush(IProcessExecutor processExecutor)
+        {
+        }
     }
 }

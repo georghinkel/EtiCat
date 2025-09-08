@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace EtiCat.Contracts
 {
+    /// <summary>
+    /// Denotes a component to write to the console (used for testing purposes)
+    /// </summary>
     public interface IConsoleWriter
     {
+        /// <summary>
+        /// Writes the given line
+        /// </summary>
+        /// <param name="message">the message</param>
         void WriteLine(string message);
     }
 }

@@ -1,4 +1,5 @@
-﻿using EtiCat.Core;
+﻿using EtiCat.Contracts;
+using EtiCat.Core;
 using EtiCat.Model;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,19 @@ namespace EtiCat.Components.NuGet
     {
         private const string NuspecXmlns = "http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd";
 
-        private XElement _tree;
+        private readonly XElement _tree;
+
+        private readonly NuspecComponentProvider _provider;
 
         public override string Type => "nuspec";
 
-        private NuspecComponent(string path, XElement tree)
+        public override IComponentProvider Provider => _provider;
+
+        private NuspecComponent(NuspecComponentProvider provider, string path, XElement tree)
             : base(path, ExtractId(tree))
         {
+            _provider = provider;
+
             var dependencies = tree.XPathSelectElements("//*[local-name()='dependency']");
             foreach (var dependency in dependencies)
             {
@@ -72,18 +79,17 @@ namespace EtiCat.Components.NuGet
             return DependencyBehavior.ExactMinor;
         }
 
-        public NuspecComponent(string path) : this(path, XElement.Load(path))
+        public NuspecComponent(NuspecComponentProvider provider, string path) : this(provider, path, XElement.Load(path))
         {
         }
 
-        public override void Apply(ExtendedVersionInfo versionInfo)
+        public override void Apply(ExtendedVersionInfo versionInfo, bool dry)
         {
             var version = _tree.XPathSelectElement("//*[local-name()='version']");
             if (version != null)
             {
                 version.Value = versionInfo.ToStringNoCommit();
             }
-
 
             var dependencies = _tree.XPathSelectElements("//*[local-name()='dependency']");
             foreach (var dependency in dependencies)
@@ -129,21 +135,32 @@ namespace EtiCat.Components.NuGet
                 }
             }
 
-            _tree.Save(Path);
+            if (dry)
+            {
+                var writer = new StringWriter();
+                _tree.WriteTo(XmlWriter.Create(writer));
+                Console.WriteLine($"Would write to {Path}:");
+                Console.WriteLine(writer.ToString());
+                Console.WriteLine();
+            }
+            else
+            {
+                _tree.Save(Path);
+            }
         }
 
-        public override void Pack()
+        public override void Pack(IProcessExecutor processExecutor)
         {
             var csproj = Module?.Components.FirstOrDefault(c => c.Type == "csproj")?.Path;
 
             if (csproj == null)
             {
                 Console.WriteLine($"Module {Module?.Name} contains no csproj, therefore using NuGet.exe to pack {Path}");
-                ExecuteAndCheck("nuget", $"pack {Path} -Symbols -SymbolPackageFormat snupkg");
+                processExecutor.ExecuteAndCheck("nuget", $"pack {Path} -Symbols -SymbolPackageFormat snupkg");
             }
             else
             {
-                ExecuteAndCheck("dotnet", $"pack --no-build --include-symbols -p:NuspecFile={Path} -p:NuspecBasePath={IOPath.GetDirectoryName(Path)} {csproj}");
+                processExecutor.ExecuteAndCheck("dotnet", $"pack --no-build --include-symbols -p:NuspecFile={Path} -p:NuspecBasePath={IOPath.GetDirectoryName(Path)} {csproj}");
             }
         }
     }

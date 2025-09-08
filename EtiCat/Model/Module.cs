@@ -22,6 +22,19 @@ namespace EtiCat.Model
 
         public bool IsTestOnlyChanges { get; set; }
 
+        public Dictionary<string, string> Settings { get; } = new Dictionary<string, string>();
+
+        public string GetSettingOrDefault(string key, string defaultValue)
+        {
+            ArgumentNullException.ThrowIfNull(key);
+
+            if (Settings.TryGetValue(key, out var value))
+            {
+                return value;
+            }
+            return defaultValue;
+        }
+
         public List<string> Folders { get; } = new List<string>();
 
         public List<string> TestFolders { get; } = new List<string>();

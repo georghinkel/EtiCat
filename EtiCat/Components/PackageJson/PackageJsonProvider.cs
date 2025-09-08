@@ -15,9 +15,13 @@ namespace EtiCat.Components.PackageJson
             return path.EndsWith("package.json");
         }
 
+        public void Flush(IProcessExecutor processExecutor)
+        {
+        }
+
         public Component ProvideComponent(string path)
         {
-            return new PackageJsonComponent(path);
+            return new PackageJsonComponent(this, path);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using CommandLine;
 using EtiCat.Components.AssemblyInfo;
 using EtiCat.Components.Csproj;
+using EtiCat.Components.Docker;
 using EtiCat.Components.NuGet;
 using EtiCat.Components.PackageJson;
+using EtiCat.Components.Shell;
 using EtiCat.Contracts;
 using EtiCat.Core;
 using EtiCat.Model;
@@ -20,9 +22,10 @@ namespace EtiCat.Verbs
     {
         protected VerbBase()
         {
-            ComponentProviders = [new NuspecComponentProvider(), new CsprojComponentProvider(), new PackageJsonProvider(), new AssemblyInfoProvider()];
+            ComponentProviders = [new NuspecComponentProvider(), new MsbuildComponentProvider(), new PackageJsonProvider(), new AssemblyInfoProvider(), new ShellComponentProvider(), new DockerComponentProvider()];
             VersionControlProviders = [new GitServiceProvider()];
             ConsoleWriter = new ConsoleWriter();
+            ProcessExecutor = new ProcessExecutor();
         }
 
         protected VerbBase(VerbBase other)
@@ -33,6 +36,7 @@ namespace EtiCat.Verbs
             ConsoleWriter = other.ConsoleWriter;
             WorkingDirectory = other.WorkingDirectory;
             Baseline = other.Baseline;
+            ProcessExecutor = other.ProcessExecutor;
         }
 
         [Option('w', "working-directory", HelpText = "Sets a different working directory", Required = false)]
@@ -49,11 +53,13 @@ namespace EtiCat.Verbs
 
         public IVersionControlServices? VersionControlServices { get; internal set; }
 
+        public IProcessExecutor ProcessExecutor { get; internal set; }
+
         public IConsoleWriter ConsoleWriter { get; internal set; }
 
         public virtual bool LoadChanges => false;
 
-        public int Execute()
+        public virtual int Execute()
         {
             if (WorkingDirectory == null)
             {

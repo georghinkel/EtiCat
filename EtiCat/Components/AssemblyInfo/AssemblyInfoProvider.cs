@@ -15,6 +15,10 @@ namespace EtiCat.Components.AssemblyInfo
             return path.EndsWith("AssemblyInfo.cs");
         }
 
+        public void Flush(IProcessExecutor processExecutor)
+        {
+        }
+
         public Component ProvideComponent(string path)
         {
             var directory = new DirectoryInfo(Path.GetDirectoryName(path)!);
@@ -22,7 +26,7 @@ namespace EtiCat.Components.AssemblyInfo
             {
                 directory = directory.Parent;
             }
-            return new AssemblyInfoComponent(path, directory?.Name);
+            return new AssemblyInfoComponent(path, directory?.Name, this);
         }
     }
 }

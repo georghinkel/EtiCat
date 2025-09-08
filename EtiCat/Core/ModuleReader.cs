@@ -183,6 +183,18 @@ namespace EtiCat.Core
                 module.TestComponents.Add(ParseComponent(module, directory, line, 5));
                 return true;
             }
+            if (line.StartsWith("use ", StringComparison.OrdinalIgnoreCase))
+            {
+                var index = line.IndexOf('=', 4);
+                if (index == -1)
+                {
+                    module.Settings[line.Substring(4).Trim()] = "true";
+                } 
+                else
+                {
+                    module.Settings[line.Substring(4, index - 4).Trim()] = line.Substring(index + 1).Trim();
+                }
+            }
             return false;
         }
 

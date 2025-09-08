@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EtiCat.Verbs
 {
     [Verb("ci", HelpText = "Runs check, apply and pack in sequence")]
-    internal class CiVerb : VerbBase
+    internal class CiVerb : DryRunVerbBase
     {
 
         [Option('p', "prerelease", HelpText = "Sets the prerelease version information")]
@@ -23,13 +23,24 @@ namespace EtiCat.Verbs
         public string? CommitId { get; set; }
 
 
+        [Option("skip-build", HelpText = "If set, compilation steps are omitted")]
+        public bool SkipBuild { get; set; }
+
+        [Option("skip-test", HelpText = "If set, tests are omitted")]
+        public bool SkipTest { get; set; }
+
         public override void ExecuteCore(IReadOnlyCollection<Module> modules)
         {
             var check = new CheckVerb(this);
             check.ExecuteCore(modules);
             var apply = new ApplyVerb(this) { Prerelease = Prerelease, BuildNumber = BuildNumber, CommitId = CommitId };
             apply.ExecuteCore(modules);
-            var pack = new PackVerb(this) { OnlyAffected = true };
+            var pack = new PackVerb(this) 
+            {
+                OnlyAffected = true,
+                SkipBuild = SkipBuild,
+                SkipTest = SkipTest,
+            };
             pack.ExecuteCore(modules);
         }
 

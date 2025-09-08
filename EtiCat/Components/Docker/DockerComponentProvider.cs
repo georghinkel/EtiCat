@@ -6,18 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EtiCat.Components.Csproj
+namespace EtiCat.Components.Docker
 {
-    internal class CsprojComponentProvider : IComponentProvider
+    internal class DockerComponentProvider : IComponentProvider
     {
         public bool CanProvideComponent(string path, string extension)
         {
-            return extension == ".csproj";
+            return Path.GetFileName(path) == "Dockerfile";
+        }
+
+        public void Flush(IProcessExecutor processExecutor)
+        {
         }
 
         public Component ProvideComponent(string path)
         {
-            return new CsprojComponent(path);
+            return new DockerfileComponent(path, this);
         }
     }
 }
