@@ -160,12 +160,12 @@ namespace EtiCat.Core
         {
             if (line.StartsWith("folder ", StringComparison.OrdinalIgnoreCase))
             {
-                module.Folders.Add(Path.GetFullPath(Path.Combine(directory, line.Substring(7))));
+                module.Folders.Add(AppendDirectorySeparatorCharIfNecessary(Path.GetFullPath(Path.Combine(directory, line.Substring(7)))));
                 return true;
             }
             if (line.StartsWith("testFolder ", StringComparison.OrdinalIgnoreCase))
             {
-                module.TestFolders.Add(Path.GetFullPath(Path.Combine(directory, line.Substring(11))));
+                module.TestFolders.Add(AppendDirectorySeparatorCharIfNecessary(Path.GetFullPath(Path.Combine(directory, line.Substring(11)))));
                 return true;
             }
             if (line.StartsWith("component ", StringComparison.OrdinalIgnoreCase))
@@ -196,6 +196,11 @@ namespace EtiCat.Core
                 }
             }
             return false;
+        }
+
+        private string AppendDirectorySeparatorCharIfNecessary(string path)
+        {
+            return path.EndsWith(Path.DirectorySeparatorChar) ? path : path + Path.DirectorySeparatorChar;
         }
 
         private Component ParseComponent(Module module, string directory, string line, int start)

@@ -10,3 +10,4 @@ patch (0.1.0): Initial version
 patch: fix that folders were ignored for check
 patch: improved output
 minor: support settings, docker, shell, fix msbuild
+patch: qualify default baseline, fix prefix folders

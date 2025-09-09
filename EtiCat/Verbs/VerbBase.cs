@@ -42,8 +42,8 @@ namespace EtiCat.Verbs
         [Option('w', "working-directory", HelpText = "Sets a different working directory", Required = false)]
         public string? WorkingDirectory { get; set; }
 
-        [Option('b', "baseline", HelpText = "A commit specifier to specify the baseline commit. If there are no commits since the baseline, the system falls back to the second-last commit", Required = false, Default = "main")]
-        public string Baseline { get; set; } = "main";
+        [Option('b', "baseline", HelpText = "A commit specifier to specify the baseline commit. If there are no commits since the baseline, the system falls back to the second-last commit", Required = false, Default = "origin/main")]
+        public string Baseline { get; set; } = "origin/main";
 
         public abstract void ExecuteCore(IReadOnlyCollection<Module> modules);
 
