@@ -13,6 +13,11 @@ namespace EtiCat.Components.Csproj
         private readonly StringBuilder _affectedBuilder = new StringBuilder();
         private string? _task;
 
+        public MsbuildComponentProvider()
+        {
+            WriteHeader();
+        }
+
         private void WriteHeader()
         {
             _affectedBuilder.AppendLine("<Project Sdk=\"Microsoft.Build.Traversal/4.1.82\">");
@@ -36,10 +41,16 @@ namespace EtiCat.Components.Csproj
 
             var path = Path.Combine(Path.GetTempPath(), "affected.proj");
             WriteFooter();
+
             File.WriteAllText(path, _affectedBuilder.ToString());
-
-            processExecutor.ExecuteAndCheck("dotnet", $"{_task} \"{path}\"");
-
+            try
+            {
+                processExecutor.ExecuteAndCheck("dotnet", $"{_task} \"{path}\"");
+            }
+            finally
+            {
+                File.Delete(path);
+            }
             _affectedBuilder.Clear();
             WriteHeader();
             _task = null;

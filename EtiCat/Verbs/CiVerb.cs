@@ -33,13 +33,20 @@ namespace EtiCat.Verbs
         {
             var check = new CheckVerb(this);
             check.ExecuteCore(modules);
-            var apply = new ApplyVerb(this) { Prerelease = Prerelease, BuildNumber = BuildNumber, CommitId = CommitId };
+            var apply = new ApplyVerb(this)
+            {
+                Prerelease = Prerelease, 
+                BuildNumber = BuildNumber, 
+                CommitId = CommitId,
+                DryRun = DryRun,
+            };
             apply.ExecuteCore(modules);
             var pack = new PackVerb(this) 
             {
                 OnlyAffected = true,
                 SkipBuild = SkipBuild,
                 SkipTest = SkipTest,
+                DryRun = DryRun
             };
             pack.ExecuteCore(modules);
         }

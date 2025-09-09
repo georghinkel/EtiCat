@@ -2,7 +2,8 @@
   "profiles": {
     "EtiCat": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Repos\\NMF"
+      "commandLineArgs": "ci",
+      "workingDirectory": "C:\\Repos\\EtiCat"
     }
   }
 }

@@ -1,34 +1,35 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RollForward>LatestMajor</RollForward>
-    	<Description>A tool to automate versioning and tagging for .NET-based monorepositories</Description>
-	<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	<Copyright>Georg Hinkel</Copyright>
-	<PackageProjectUrl>https://github.com/georghinkel/EtiCat</PackageProjectUrl>
-	<RepositoryUrl>https://github.com/georghinkel/EtiCat.git</RepositoryUrl>
-	<PackAsTool>true</PackAsTool>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>A tool to automate versioning and tagging for .NET-based monorepositories</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Georg Hinkel</Copyright>
+    <PackageProjectUrl>https://github.com/georghinkel/EtiCat</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/georghinkel/EtiCat.git</RepositoryUrl>
+    <PackAsTool>true</PackAsTool>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>versioning;monorepo;ci</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
-	<PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <FileVersion>0.2.0.0</FileVersion>
+    <InformationalVersion>0.2.0.0+c156715ce63816e335b18c6195f642965955beb3</InformationalVersion>
+    <PackageVersion>0.2.0+c156715ce63816e335b18c6195f642965955beb3</PackageVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NMF-Layering" Version="2.0.457" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Properties\" />
     <InternalsVisibleTo Include="EtiCat.Tests" />
-	<None Include="..\icon.png" Pack="true" PackagePath="" />
-	<None Include="..\README.md" Pack="true" PackagePath="" />
+    <None Include="..\icon.png" Pack="true" PackagePath="" />
+    <None Include="..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
-
 </Project>
