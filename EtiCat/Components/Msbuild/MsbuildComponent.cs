@@ -84,17 +84,17 @@ namespace EtiCat.Components.Csproj
 
         public override void Compile(IProcessExecutor processExecutor)
         {
-            _provider.Schedule(Path, "build --configuration Release", processExecutor);
+            _provider.Schedule(Path, Module!.GetSettingOrDefault("msbuild_build", "build --configuration Release"), processExecutor);
         }
 
         public override void Test(IProcessExecutor processExecutor)
         {
-            _provider.Schedule(Path, "test --configuration Release", processExecutor);
+            _provider.Schedule(Path, Module!.GetSettingOrDefault("msbuild_test", "test --configuration Release"), processExecutor);
         }
 
         public override void Pack(IProcessExecutor processExecutor)
         {
-            _provider.Schedule(Path, "pack --no-build --include-symbols", processExecutor);
+            _provider.Schedule(Path, Module!.GetSettingOrDefault("msbuild_pack", "pack --no-build"), processExecutor);
         }
     }
 }
