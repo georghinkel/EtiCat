@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace EtiCat.Verbs
 {
+    [Verb("pack", HelpText = "Packs modules")]
     internal class PackVerb : DryRunVerbBase
     {
         public PackVerb() { }
@@ -38,7 +39,7 @@ namespace EtiCat.Verbs
         private void Pack(IReadOnlyCollection<Module> modules)
         {
             IComponentProvider? _lastProvider = null;
-            foreach (var module in modules.Where(m => m.IsChangedSinceBaseline))
+            foreach (var module in modules.Where(m => !OnlyAffected || m.IsChangedSinceBaseline))
             {
                 foreach (var component in module.PublishComponents)
                 {
@@ -53,7 +54,7 @@ namespace EtiCat.Verbs
         private void Test(IReadOnlyCollection<Module> modules)
         {
             IComponentProvider? _lastProvider = null;
-            foreach (var module in modules.Where(m => m.IsChangedSinceBaseline))
+            foreach (var module in modules.Where(m => !OnlyAffected || m.IsChangedSinceBaseline || m.IsTestOnlyChanges))
             {
                 foreach (var component in module.TestComponents)
                 {
