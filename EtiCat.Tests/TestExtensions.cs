@@ -24,7 +24,7 @@ namespace EtiCat.Tests
             verb.ConsoleWriter = writer;
             if (verb.Execute() == 0)
             {
-                return writer.ToString();
+                return writer.ToString().TrimEnd();
             }
             else
             {

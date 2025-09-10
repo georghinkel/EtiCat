@@ -156,11 +156,11 @@ namespace EtiCat.Components.NuGet
             if (csproj == null)
             {
                 Console.WriteLine($"Module {Module?.Name} contains no csproj, therefore using NuGet.exe to pack {Path}");
-                processExecutor.ExecuteAndCheck("nuget", $"pack {Path} -Symbols -SymbolPackageFormat snupkg");
+                processExecutor.ExecuteAndCheck("nuget", $"pack {Path} " + Module!.GetSettingOrDefault("nuget_pack_args", "-Symbols -SymbolPackageFormat snupkg").Trim());
             }
             else
             {
-                processExecutor.ExecuteAndCheck("dotnet", $"pack --no-build --include-symbols -p:NuspecFile={Path} -p:NuspecBasePath={IOPath.GetDirectoryName(Path)} {csproj}");
+                processExecutor.ExecuteAndCheck("dotnet", $"pack -p:NuspecFile={Path} -p:NuspecBasePath={IOPath.GetDirectoryName(Path)} {csproj} " + Module!.GetSettingOrDefault("dotnet_pack_args", "--no-build"));
             }
         }
     }

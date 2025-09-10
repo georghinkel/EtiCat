@@ -12,6 +12,12 @@ namespace EtiCat.Contracts
     public interface IConsoleWriter
     {
         /// <summary>
+        /// Writes the given line without line break
+        /// </summary>
+        /// <param name="message">the message</param>
+        void Write(string message);
+
+        /// <summary>
         /// Writes the given line
         /// </summary>
         /// <param name="message">the message</param>

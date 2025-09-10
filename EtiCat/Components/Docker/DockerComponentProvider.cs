@@ -10,6 +10,16 @@ namespace EtiCat.Components.Docker
 {
     internal class DockerComponentProvider : IComponentProvider
     {
+        public string Name => "Docker";
+
+        public IEnumerable<ModuleParameter> SupportedParameters
+        {
+            get
+            {
+                yield return new ModuleParameter("docker_tag", "Template from which tag names for docker containers are built.", "%module%");
+            }
+        }
+
         public bool CanProvideComponent(string path, string extension)
         {
             return Path.GetFileName(path) == "Dockerfile";

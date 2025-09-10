@@ -27,19 +27,22 @@ namespace EtiCat.Verbs
             var missingModuleChanges = new List<string>();
             foreach (var module in modules)
             {
-                ConsoleWriter.WriteLine($"Checking {module.Name}");
+                ConsoleWriter.Write($"Checking {module.Name}...");
 
                 if (filesAffected.Contains(module.Path))
                 {
+                    ConsoleWriter.WriteLine("changed");
                     continue;
                 }
 
                 if (filesAffected.Any(path => module.Folders.Any(f => path.StartsWith(f))))
                 {
+                    ConsoleWriter.WriteLine("missing change description");
                     missingModuleChanges.Add(module.Name);
                 }
                 else
                 {
+                    ConsoleWriter.WriteLine("unchanged");
                     if (filesAffected.Any(path => module.TestFolders.Any(f => path.StartsWith(f))))
                     {
                         Console.Error.WriteLine($"Module {module.Name} has test-only changes.");

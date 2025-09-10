@@ -7,5 +7,6 @@ Environment.ExitCode = Parser.Default.ParseArguments(args,
     typeof(CheckVerb),
     typeof(CiVerb),
     typeof(PackVerb),
+    typeof(ProvidersVerb),
     typeof(PublishVerb),
     typeof(TagVerb)).MapResult((VerbBase v) => v.Execute(), _ => 2);

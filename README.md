@@ -48,3 +48,97 @@ patch: A patch
 *EtiCat* determines the type of component primarily using file paths. It reads the component definitions and extracts dependency information. When the version of a component changes, *EtiCat* makes sure that all components using that component as a dependency also get a new version, if the new version falls out of the current dependency version range, for instance because an artifact such as a nuspec excludes newer major versions.
 
 In addition, *EtiCat* can also determine which modules are affected by a given change from Git to limit the work done by CI jobs. That means, using the **ci** verb, *EtiCat* only compiles components and runs respective tests that are affected by a change relative to a given baseline (by default: *main*).
+
+## GitHub Actions CI
+
+Consider the following examples, how EtiCat can be used to build up efficient CI pipelines for mono-repos.
+
+### CI Workflow (default)
+
+The following GitHub Actions workflow will build only changed modules compared to the main branch. It will use the branch name as prerelease marker.
+
+```yaml
+name: default
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: | 
+          8.0.x
+          9.0.x
+    - name: Install Eticat
+      run: dotnet tool install -g EtiCat
+    - name: CI
+      run: EtiCat ci --prerelease ${{ steps.extract_branch.outputs.branch }} --baseline origin/main
+    - name: Upload Packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: Nuget Packages
+        path: Build/*.nupkg
+```
+
+An important bit here is that the checkout action gets the `fetch-depth: 0` configuration as the checkout action will otherwise only fetch the commit that shall be built. However, EtiCat requires a history in order to detect changes. The last step assumes that NuGet packages are present under a directory `Build`.
+*EtiCat* will make sure that only packages affected by the commit are actually built and the wildcard upload action will only upload packages that are affected by the build.
+
+### Release CI Build
+
+The second suggested build workflow is the following release build. In this workflow, no prerelease marker is added to the version number. To set the baseline, we use a GitHub action
+to retrieve the last commit for which a successful workflow was created. 
+
+```yaml
+name: release
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: nrwl/last-successful-commit-action@v1
+      id: last_successful_commit
+      with:
+        branch: 'main'
+        workflow_id: 'release.yml'
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: | 
+          8.0.x
+          9.0.x
+    - name: Install Eticat
+      run: dotnet tool install -g EtiCat
+    - name: CI
+      run: EtiCat ci  --baseline ${{ steps.last_successful_commit.outputs.commit_hash }}
+    - name: Publish the package
+      run: if (Test-path Build/*.nupkg) { dotnet nuget push Build/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} }
+      shell: pwsh
+```

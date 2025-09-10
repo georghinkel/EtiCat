@@ -9,16 +9,21 @@ namespace EtiCat.Tests.Stubs
 {
     internal class StringConsoleWriter : IConsoleWriter
     {
-        private string? _output;
+        private StringBuilder _output = new StringBuilder();
 
         public void WriteLine(string message)
         {
-            _output = message;
+            _output.AppendLine(message);
         }
 
         public override string ToString()
         {
-            return _output!;
+            return _output.ToString();
+        }
+
+        public void Write(string message)
+        {
+            _output.Append(message);
         }
     }
 }

@@ -39,36 +39,49 @@ namespace EtiCat.Verbs
         private void Pack(IReadOnlyCollection<Module> modules)
         {
             IComponentProvider? _lastProvider = null;
+            var somethingToPack = false;
             foreach (var module in modules.Where(m => !OnlyAffected || m.IsChangedSinceBaseline))
             {
                 foreach (var component in module.PublishComponents)
                 {
+                    somethingToPack = true;
                     FlushProvider(ref _lastProvider, component);
                     ConsoleWriter.WriteLine($"Packing {component.Name}");
                     component.Pack(ProcessExecutor);
                 }
             }
             _lastProvider?.Flush(ProcessExecutor);
+            if (!somethingToPack)
+            {
+                ConsoleWriter.WriteLine("No components needed to be packed.");
+            }
         }
 
         private void Test(IReadOnlyCollection<Module> modules)
         {
             IComponentProvider? _lastProvider = null;
+            var somethingToTest = false;
             foreach (var module in modules.Where(m => !OnlyAffected || m.IsChangedSinceBaseline || m.IsTestOnlyChanges))
             {
                 foreach (var component in module.TestComponents)
                 {
+                    somethingToTest = true;
                     FlushProvider(ref _lastProvider, component);
                     ConsoleWriter.WriteLine($"Testing {component.Name}");
                     component.Test(ProcessExecutor);
                 }
             }
             _lastProvider?.Flush(ProcessExecutor);
+            if (!somethingToTest)
+            {
+                ConsoleWriter.WriteLine("No components needed to be tested.");
+            }
         }
 
         private void Compile(IList<ICollection<Module>> layers)
         {
             IComponentProvider? _lastProvider = null;
+            var somethingToCompile = false;
             for (int i = 0; i < layers.Count; i++)
             {
                 if (layers[i].Count > 1)
@@ -77,12 +90,17 @@ namespace EtiCat.Verbs
                 }
                 foreach (var component in layers[i].First().CompileComponents)
                 {
+                    somethingToCompile = true;
                     FlushProvider(ref _lastProvider, component);
                     ConsoleWriter.WriteLine($"Compiling {component.Name}");
                     component.Compile(ProcessExecutor);
                 }
             }
             _lastProvider?.Flush(ProcessExecutor);
+            if (!somethingToCompile)
+            {
+                ConsoleWriter.WriteLine("No components needed to be built.");
+            }
         }
 
         private void FlushProvider(ref IComponentProvider? _lastProvider, Component component)

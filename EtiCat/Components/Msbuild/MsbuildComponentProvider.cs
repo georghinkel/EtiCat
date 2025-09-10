@@ -13,6 +13,18 @@ namespace EtiCat.Components.Csproj
         private readonly StringBuilder _affectedBuilder = new StringBuilder();
         private string? _task;
 
+        public string Name => "MSBuild";
+
+        public IEnumerable<ModuleParameter> SupportedParameters
+        {
+            get
+            {
+                yield return new ModuleParameter("msbuild_build", "Parameters passed to MSBuild when building a component", "build --configuration Release");
+                yield return new ModuleParameter("msbuild_test", "Parameters passed to MSBuild when testing a component", "test --configuration Release");
+                yield return new ModuleParameter("msbuild_pack", "Parameters passed to MSBuild when packing a component", "pack --no-build");
+            }
+        }
+
         public MsbuildComponentProvider()
         {
             WriteHeader();

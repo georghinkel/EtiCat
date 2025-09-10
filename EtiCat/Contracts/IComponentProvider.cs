@@ -32,5 +32,15 @@ namespace EtiCat.Contracts
         /// </summary>
         /// <param name="processExecutor">a component to process subtasks</param>
         void Flush(IProcessExecutor processExecutor);
+
+        /// <summary>
+        /// Gets the name of the provider
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// Gets a collection of parameters
+        /// </summary>
+        IEnumerable<ModuleParameter> SupportedParameters { get; }
     }
 }

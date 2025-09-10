@@ -10,6 +10,10 @@ namespace EtiCat.Components.AssemblyInfo
 {
     internal class AssemblyInfoProvider : IComponentProvider
     {
+        public string Name => "Assembly Info";
+
+        public IEnumerable<ModuleParameter> SupportedParameters => Enumerable.Empty<ModuleParameter>();
+
         public bool CanProvideComponent(string path, string extension)
         {
             return path.EndsWith("AssemblyInfo.cs");

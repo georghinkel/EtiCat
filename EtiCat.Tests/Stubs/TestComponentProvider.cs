@@ -16,6 +16,10 @@ namespace EtiCat.Tests.Stubs
 
         public List<string> RequestedComponents { get; } = new List<string>();
 
+        public string Name => "test";
+
+        public IEnumerable<ModuleParameter> SupportedParameters => Enumerable.Empty<ModuleParameter>();
+
         public bool CanProvideComponent(string path, string extension)
         {
             RequestedComponents.Add(path);
